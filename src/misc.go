@@ -22,7 +22,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
+//	"path/filepath"
 	"reflect"
 	"regexp"
 	"runtime"
@@ -1006,27 +1006,8 @@ func list(flArg *fsListingArg) (fileChan chan *File, err error) {
 			if !symlink(file.Mode()) {
 				fileChan <- NewLocalFile(resPath, file)
 			} else {
-				var symResolvPath string
-				symResolvPath, err = filepath.EvalSymlinks(resPath)
-				if err != nil {
-					continue
-				}
+			//if is symlink
 
-				if anyMatch(ignore, symResolvPath) {
-					continue
-				}
-
-				var symInfo os.FileInfo
-				symInfo, err = os.Stat(symResolvPath)
-				if err != nil {
-					continue
-				}
-
-				lf := NewLocalFile(symResolvPath, symInfo)
-				// Retain the original name as appeared in
-				// the manifest instead of the resolved one
-				lf.Name = fileName
-				fileChan <- lf
 			}
 		}
 	}()
